@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Carousel</title>
+</head>
+<style>
+    /* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.carousel-container {
+    position: relative;
+    width: 80%;
+    max-width: 600px;
+    overflow: hidden;
+}
+
+.carousel {
+    display: flex;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    transition: transform 0.5s ease;
+}
+
+.carousel li {
+    min-width: 100%;
+}
+
+.carousel img {
+    width: 100%;
+    display: block;
+}
+
+button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.prev {
+    left: 10px;
+}
+
+.next {
+    right: 10px;
+}
+
+</style>
+<script>
+    /* scripts.js */
+    window.onload = function()
+{
+    const carousel = document.querySelector('.carousel');
+const prevButton = document.querySelector('.prev');
+const nextButton = document.querySelector('.next');
+let currentIndex = 0;
+const totalImages = document.querySelectorAll('.carousel li').length;
+
+function showSlide(index) {
+    if (index >= totalImages) {
+        currentIndex = 0;
+    } else if (index < 0) {
+        currentIndex = totalImages - 1;
+    } else {
+        currentIndex = index;
+    }
+    const newTransformValue = -currentIndex * 100 + '%';
+    carousel.style.transform = `translateX(${newTransformValue})`;
+}
+
+function nextSlide() {
+    showSlide(currentIndex + 1);
+}
+
+function prevSlide() {
+    showSlide(currentIndex - 1);
+}
+
+let autoSlide = setInterval(nextSlide, 2000);
+
+nextButton.addEventListener('click', () => {
+    nextSlide();
+    resetInterval();
+});
+
+prevButton.addEventListener('click', () => {
+    prevSlide();
+    resetInterval();
+});
+
+function resetInterval() {
+    clearInterval(autoSlide);
+    autoSlide = setInterval(nextSlide, 2000);
+}
+
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        clearInterval(autoSlide);
+    } else {
+        autoSlide = setInterval(nextSlide, 2000);
+    }
+});
+}
+</script>
+<body>
+    <div class="carousel-container">
+        <ul class="carousel">
+            <li id = "image1"><img src="image1.jpg" alt="Image 1"></li>
+            <li id = "image2"><img src="image2.jpg" alt="Image 2"></li>
+            <li id = "image3"><img src="image3.jpg" alt="Image 3"></li>
+        </ul>
+        <button class="prev">&laquo; Prev</button>
+        <button class="next">Next &raquo;</button>
+    </div>
+</body>
+</html>
